@@ -32,15 +32,15 @@ const UserDropdown = () => {
         <div>
             <DropdownMenu >
                 <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' className="flex items-center gap-3 text-gray-400 hover:text-yellow-500">
+                    <Button variant='ghost' className="flex items-center gap-2 sm:gap-3 text-gray-400 hover:text-yellow-500 p-2">
                         <Avatar className="h-8 w-8">
                             <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback className="bg-yellow-500 text-white text-lg font-bold ">
                                 {users.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="hidden md:flex flex-col items-start ">
-                            <span text-base font-medium text-gray-400>
+                        <div className="hidden sm:flex flex-col items-start">
+                            <span className="text-sm sm:text-base font-medium text-gray-400">
                                 {users.name}
                             </span>
                         </div>
@@ -74,10 +74,11 @@ const UserDropdown = () => {
                         <LogOutIcon className="w-4 h-4 mr-2 hidden sm:block"/>
                         LogOut 
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-gray-600 hidden sm:block"/>
-                    <nav className="sm:hidden">
-                        <NavItems /> 
-
+                    <DropdownMenuSeparator className="bg-gray-600"/>
+                    <nav className="block lg:hidden">
+                        <div className="px-2 py-1">
+                            <NavItems />
+                        </div>
                     </nav>
 
                 </DropdownMenuContent>

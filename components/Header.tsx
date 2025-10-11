@@ -7,20 +7,28 @@ import UserDropdown from './UserDropdown'
 const Header = () => {
   
   return (
-    <header className='header sticky top-0 '>
-      <div className='header-wrapper container'>
-        <Link href='/'>
-          <Image src='/assets/icons/logo.svg' alt='Signalist LOgo'  width={140} height={32} className='h-8 w-auto cursor-pointer' />
+    <header className='header sticky top-0 z-50'>
+      <div className='header-wrapper container flex items-center justify-between py-4'>
+        <Link href='/' className='flex-shrink-0'>
+          <Image 
+            src='/assets/icons/logo.svg' 
+            alt='Signalist Logo'  
+            width={140} 
+            height={32} 
+            className='h-8 w-auto cursor-pointer' 
+          />
         </Link>
 
-        <nav className='hidden sm:block '>
-          {/* NavItems component will be added here */}
+        {/* Desktop Navigation */}
+        <nav className='hidden lg:block'>
           <NavItems />
         </nav>
-        {/* user drop down component will be added here */}
-        <UserDropdown />
-      </div>
 
+        {/* User Dropdown - Always visible */}
+        <div className='flex-shrink-0'>
+          <UserDropdown />
+        </div>
+      </div>
     </header>
   )
 }
