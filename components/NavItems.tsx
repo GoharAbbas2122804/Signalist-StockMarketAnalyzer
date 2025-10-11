@@ -12,10 +12,13 @@ const NavItems = () => {
     return pathname.startsWith(path);
   }
   return (
-    <ul className='flex flex-col sm:flex-row gap-3  p-2  sm:gap-10 font-medium'>
+    <ul className='flex flex-col sm:flex-row gap-3 sm:gap-10 font-medium'>
       {NAV_ITEMS.map((item) => (
         <li key={item.href}>
-          <Link href={item.href} className={`hover:text-yellow-500 transition-colors ${isActive(item.href) ? 'text-gray-100' : ''}`}>
+          <Link 
+            href={item.href} 
+            className={`hover:text-yellow-500 transition-colors py-2 px-3 rounded-md block sm:inline ${isActive(item.href) ? 'text-yellow-500 bg-yellow-500/10' : 'text-gray-400'}`}
+          >
             {item.title}
           </Link>
         </li>
