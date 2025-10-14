@@ -170,7 +170,7 @@
     @apply w-full lg:w-[45%] lg:h-screen px-6 lg:px-16 flex flex-col overflow-y-auto;
   }
   .auth-right-section {
-    @apply w-full max-lg:border-t max-lg:border-gray-600 lg:w-[55%] lg:h-screen bg-gray-800 px-6 py-4 md:p-6 lg:py-12 lg:px-18 flex flex-col justify-start;
+    @apply w-full max-lg:border-t max-lg:border-gray-600 lg:w-[55%] lg:h-screen bg-gray-800 px-6 py-4 md:p-6 lg:py-12 lg:px-18 flex flex-col justify-between;
   }
   .auth-blockquote {
     @apply text-sm md:text-xl lg:text-2xl font-medium text-gray-400 mb-1 md:mb-6 lg:mb-8;
@@ -179,7 +179,20 @@
     @apply text-xs md:text-lg font-bold text-gray-400 not-italic;
   }
   .auth-dashboard-preview {
-    @apply border-6 border-gray-800 left-0 hidden w-[1024px] h-auto max-w-none lg:block rounded-xl shadow-2xl;
+    @apply border-6 border-gray-800 right-0 bottom-0 hidden w-[1024px] h-full max-w-none lg:block rounded-xl shadow-2xl object-cover;
+    object-position: right bottom;
+  }
+  
+  @media (min-width: 1024px) {
+    .auth-dashboard-preview {
+      @apply w-[90%] max-w-[1200px] h-full;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .auth-dashboard-preview {
+      @apply w-[85%] max-w-[1400px] h-full;
+    }
   }
   .form-title {
     @apply text-4xl font-bold text-gray-400 mb-10;
