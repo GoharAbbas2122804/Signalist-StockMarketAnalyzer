@@ -8,8 +8,15 @@ import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from '
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import FooterLink from '@/components/FooterLink'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { signUpWithEmail } from '@/lib/actions/auth.action'
+
+
+
 
 const SignUp = () => {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -31,9 +38,15 @@ const SignUp = () => {
 
     const onSubmit = async (data: SignUpFormData) => {
         try {
-            console.log(data)
+            //signUpWithEmail Server Action logic goes here
+            const response = await signUpWithEmail(data)
+            if(response.success) router.push('/');
+            toast.success('Sign Up successful')
         } catch (error) {
             console.error(error);
+            toast.error("Failed to SignUp", {
+                description: error instanceof Error ? error.message : "Failed to Create an Account"
+            })
         }
     }
 

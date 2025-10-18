@@ -4,7 +4,7 @@ import React from 'react'
 import NavItems from './NavItems'
 import UserDropdown from './UserDropdown'
 
-const Header = () => {
+const Header = ({ user }: { user: User }) => {
   
   return (
     <header className='header sticky top-0 z-50'>
@@ -26,7 +26,7 @@ const Header = () => {
 
         {/* User Dropdown - Always visible */}
         <div className='flex-shrink-0'>
-          <UserDropdown />
+          <UserDropdown  user={user}/>
         </div>
       </div>
     </header>
