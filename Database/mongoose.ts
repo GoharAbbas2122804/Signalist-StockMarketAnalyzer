@@ -48,4 +48,5 @@ export const connectToDatabase = async () => {
         console.error("❌ MongoDB connection error:", error);
         throw error;
     }
+    
 }

@@ -14,20 +14,25 @@ import { useRouter } from "next/navigation"
 import { Button } from "./ui/button";
 import {  LogOutIcon } from "lucide-react";
 import NavItems from "./NavItems";
+import { signOut } from "@/lib/actions/auth.action";
 
 
 
-const UserDropdown = () => {
+const UserDropdown = ({ user }: { user: User }) => {
     const router = useRouter();
     const handleSignOut = async () => {
+        await signOut();
         router.push('/sign-in');
     }
 
-    const users = {
-        name: 'GoharAbbas',
-        email: 'john.doe@example.com',
-        // image: 'https://github.com/shadcn.png',
-    }
+    // const users = {
+    //     name: 'GoharAbbas',
+    //     email: 'john.doe@example.com',
+    //     // image: 'https://github.com/shadcn.png',
+    // }
+
+
+
     return (
         <div>
             <DropdownMenu >
@@ -36,12 +41,12 @@ const UserDropdown = () => {
                         <Avatar className="h-8 w-8">
                             <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback className="bg-yellow-500 text-white text-lg font-bold ">
-                                {users.name.charAt(0)}
+                                {user.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
                         <div className="hidden sm:flex flex-col items-start">
                             <span className="text-sm sm:text-base font-medium text-gray-400">
-                                {users.name}
+                                {user.name}
                             </span>
                         </div>
                     </Button>
@@ -54,15 +59,15 @@ const UserDropdown = () => {
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src="https://github.com/shadcn.png" />
                                 <AvatarFallback className="bg-yellow-500 text-white text-lg font-bold ">
-                                    {users.name.charAt(0)}
+                                    {user.name.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col ">
                                 <span className="text-base font-medium text-gray-400">
-                                    {users.name}
+                                    {user.name}
                                 </span>
                                 <span className="text-base font-medium text-gray-400">
-                                    {users.email}
+                                    {user.email}
                                 </span>
                             </div>
 
