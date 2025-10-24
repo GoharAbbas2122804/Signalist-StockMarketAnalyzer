@@ -91,7 +91,7 @@ export const MARKET_OVERVIEW_WIDGET_CONFIG = {
     support_host: 'https://www.tradingview.com', // TradingView host
     backgroundColor: '#141414', // background color
     width: '100%', // full width
-    height: 600, // height in px
+    height: 700, // height in px
     showSymbolLogo: true, // show logo next to symbols
     showChart: true, // display mini chart
 };
@@ -112,7 +112,7 @@ export const HEATMAP_WIDGET_CONFIG = {
     hasSymbolTooltip: true,
     isMonoSize: false,
     width: '100%',
-    height: '600',
+    height: '700',
 };
 
 export const TOP_STORIES_WIDGET_CONFIG = {
@@ -123,13 +123,13 @@ export const TOP_STORIES_WIDGET_CONFIG = {
     locale: 'en',
     market: 'stock',
     width: '100%',
-    height: '600',
+    height: '700',
 };
 
 export const MARKET_DATA_WIDGET_CONFIG = {
     title: 'Stocks',
     width: '100%',
-    height: 600,
+    height: 700,
     locale: 'en',
     showSymbolLogo: true,
     colorTheme: 'dark',

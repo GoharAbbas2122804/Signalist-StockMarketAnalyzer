@@ -2,6 +2,7 @@ import { success } from "better-auth";
 import { inngest } from "./client";
 import { PERSONALIZED_WELCOME_EMAIL_PROMPT } from "./prompts";
 import { sendWelcomeEmail } from "../NodeMailer";
+import { getAllUsersForNewsEmail } from "../actions/user.actions";
 
 export const sendSignUpEmail =  inngest.createFunction(
     {id: 'sign-up-email'},
@@ -57,4 +58,25 @@ export const sendSignUpEmail =  inngest.createFunction(
 
 
     
+)
+
+export const sendDailyNewsSummary = inngest.createFunction(
+    {id: 'daily-news-summary'},
+    [{event: 'app/send.daily.news'},  {cron: '0 12 * * *'} ],
+    async ({step}) => {
+        //step 1: get all the users who have enabled daily news summary 
+        const users = await step.run('get-all-users', getAllUsersForNewsEmail);
+
+        //if there are no users who have enabled daily news summary , then return
+        if(!users || users.length === 0) {
+            return {
+                success: true,
+                message: 'No users found for daily news summary'
+            }
+        }
+
+        //steps 2: personalize the news summary email for each user
+        //steps 3: Summarize these news via Ai Api and get the summary for each user
+        //steps 4: send the personalized news summary email to each user
+    }
 )

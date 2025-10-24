@@ -22,7 +22,7 @@ const page = () => {
         {/* Stock heatmap chart 2 */}
         <div className='md:col-span-1 xl:col-span-2'>
           <TradingViewWidget
-            title='Stcok HeatMap'
+            title='Stock HeatMap'
             scriptUrl={`${scriptUrl}stock-heatmap.js`}
             config={HEATMAP_WIDGET_CONFIG}
            
