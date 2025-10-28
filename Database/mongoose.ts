@@ -33,8 +33,13 @@ export const connectToDatabase = async () => {
         cached.promise = mongoose.connect(MONGODB_URI, {
             bufferCommands: false,
             maxPoolSize: 10, // Maintain up to 10 socket connections
-            serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+            serverSelectionTimeoutMS: 10000, // Keep trying to send operations for 10 seconds
+            socketTimeoutMS: 60000, // Close sockets after 60 seconds of inactivity
+            connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
+            retryReads: true,
+            retryWrites: true,
+            heartbeatFrequencyMS: 10000, // Send a ping every 10 seconds
+            maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
         });
     }
 
