@@ -7,7 +7,10 @@ import { toast } from "sonner";
 
 export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry }: SignUpFormData) => {
     try {
-        const response = await auth.api.signUpEmail({ body: { email, password, name: fullName } })
+        const response = await auth.api.signUpEmail({ 
+            body: { email, password, name: fullName },
+            headers: await headers()
+        })
 
         if(response) {
             await inngest.send({
@@ -17,20 +20,23 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
         }
 
         return { success: true, data: response }
-    } catch (e) {
+    } catch (e: any) {
         console.log('Sign up failed', e)
-        return { success: false, error: 'Sign up failed' }
+        return { success: false, error: e?.message || 'Sign up failed' }
     }
 }
 
 export const signInWithEmail = async ({ email, password }: SignInFormData) => {
     try {
-        const response = await auth.api.signInEmail({ body: { email, password } })
+        const response = await auth.api.signInEmail({ 
+            body: { email, password },
+            headers: await headers()
+        })
         
         return { success: true, data: response }
-    } catch (e) {
+    } catch (e: any) {
         console.log('Sign in failed', e)
-        return { success: false, error: 'Sign in failed' }
+        return { success: false, error: e?.message || 'Sign in failed' }
     }
 }
 
