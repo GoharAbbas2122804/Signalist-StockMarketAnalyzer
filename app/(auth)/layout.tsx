@@ -1,11 +1,12 @@
 import Header from "@/components/Header"
-import { auth } from "@/lib/better-auth/auth"
+import { getAuth } from "@/lib/better-auth/auth"
 import { headers } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
+    const auth = await getAuth();
     const session = await auth.api.getSession({
         headers: await headers()
 
@@ -17,7 +18,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
         <main className='auth-layout'>
             <section className="auth-left-section scrollbar-hide-default ">
                 <Link href='/' className="auh-logo mt-4">
-                    <Image src='assets/icons/logo.svg' alt="Signalist Logo" width={140} height={32} className="h-8 w-auto cursor-pointer" />
+                    <Image src='/assets/icons/logo.svg' alt="Signalist Logo" width={140} height={32} className="h-8 w-auto cursor-pointer" />
                 </Link>
 
                 <div className="pb-6 lg:pb-8 flex-1">

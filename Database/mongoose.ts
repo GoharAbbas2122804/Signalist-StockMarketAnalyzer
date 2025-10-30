@@ -1,56 +1,37 @@
-import mongoose from "mongoose";
-
+import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-
-
-declare global{
-    var mongooseCache : {
-        conn : typeof mongoose | null;
+declare global {
+    var mongooseCache: {
+        conn: typeof mongoose | null;
         promise: Promise<typeof mongoose> | null;
     }
 }
 
-
-
 let cached = global.mongooseCache;
 
-
-if(!cached){
-    cached = global.mongooseCache = {conn: null, promise: null};
+if(!cached) {
+    cached = global.mongooseCache = { conn: null, promise: null };
 }
 
-
 export const connectToDatabase = async () => {
-    if(!MONGODB_URI) throw new Error("MONGODB_URI is not defined, it must be defined in the environment variables");
+    if(!MONGODB_URI) throw new Error('MONGODB_URI must be set within .env');
 
-    // If we already have a cached connection, return it
     if(cached.conn) return cached.conn;
 
-    // If we don't have a promise, create one
-    if(!cached.promise){
-        cached.promise = mongoose.connect(MONGODB_URI, {
-            bufferCommands: false,
-            maxPoolSize: 10, // Maintain up to 10 socket connections
-            serverSelectionTimeoutMS: 10000, // Keep trying to send operations for 10 seconds
-            socketTimeoutMS: 60000, // Close sockets after 60 seconds of inactivity
-            connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
-            retryReads: true,
-            retryWrites: true,
-            heartbeatFrequencyMS: 10000, // Send a ping every 10 seconds
-            maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
-        });
+    if(!cached.promise) {
+        cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
     }
 
     try {
         cached.conn = await cached.promise;
-        console.log(`✅ Connected to MongoDB - ${process.env.NODE_ENV} environment`);
-        return cached.conn;
-    } catch (error) {
+    } catch (err) {
         cached.promise = null;
-        console.error("❌ MongoDB connection error:", error);
-        throw error;
+        throw err;
     }
-    
+
+    console.log(`Connected to database ${process.env.NODE_ENV} - ${MONGODB_URI}`);
+
+    return cached.conn;
 }
