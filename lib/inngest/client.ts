@@ -6,3 +6,4 @@ export const inngest = new Inngest({
         gemini: { apiKey: process.env.GEMINI_API_KEY! }
     }
 });
+
