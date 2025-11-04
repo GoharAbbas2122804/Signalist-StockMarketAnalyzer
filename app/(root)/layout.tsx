@@ -1,4 +1,5 @@
 import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 import { getAuth } from "@/lib/better-auth/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -24,11 +25,12 @@ const layout = async({ children }: { children: React.ReactNode }) => {
 
   return (
 
-      <main className='min-h-screen text-gray-400'>
+      <main className='min-h-screen text-gray-400 flex flex-col'>
         <Header user={user} />
-        <div className='container py-10'>
+        <div className='container py-10 flex-1'>
           {children}
         </div>
+        <Footer />
       </main>
 
 
