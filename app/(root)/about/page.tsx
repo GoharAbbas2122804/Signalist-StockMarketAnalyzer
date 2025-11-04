@@ -200,7 +200,7 @@ const AboutPage = () => {
           <div className="bg-gray-800 rounded-xl border border-gray-600 p-8 max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-100 mb-4">Our Mission</h3>
             <p className="text-gray-400 text-lg leading-relaxed">
-              Together, we're building the future of stock market analysis by combining cutting-edge web development 
+              Together, we&apos;re building the future of stock market analysis by combining cutting-edge web development 
               with advanced AI and machine learning. Our goal is to democratize financial insights and make 
               sophisticated market analysis accessible to everyone.
             </p>
