@@ -35,8 +35,9 @@ const Page = () => {
       }
       toast.success('Message sent successfully')
       reset()
-    } catch (err: any) {
-      toast.error(err?.message || 'Something went wrong')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong'
+      toast.error(errorMessage)
     }
   }
 
