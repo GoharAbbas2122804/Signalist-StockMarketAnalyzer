@@ -10,6 +10,7 @@ import InputFields from "@/components/InputFields";
 import CountryPicker from "@/components/CountryPicker";
 import SelectFields from "@/components/SelectFields";
 import FooterLink from "@/components/FooterLink";
+import GuestModeButton from "@/components/GuestModeButton";
 
 const SignUp = () => {
     const router = useRouter()
@@ -34,12 +35,30 @@ const SignUp = () => {
     const onSubmit = async (data: SignUpFormData) => {
         try {
             const result = await signUpWithEmail(data);
-            if(result.success) router.push('/');
-        } catch (e) {
-            console.error(e);
-            toast.error('Sign up failed', {
-                description: e instanceof Error ? e.message : 'Failed to create an account.'
-            })
+            
+            if (result.success) {
+                // Show success toast
+                toast.success('Welcome aboard!', {
+                    description: 'Your account has been created successfully.',
+                    duration: 4000,
+                });
+                
+                // Redirect to home page
+                router.push('/');
+            } else {
+                // Show error toast with parsed error details
+                toast.error(result.error?.title || 'Sign Up Failed', {
+                    description: result.error?.message || 'Failed to create account. Please try again.',
+                    duration: 6000,
+                });
+            }
+        } catch (error) {
+            // Fallback error handling
+            console.error('Unexpected error:', error);
+            toast.error('Sign Up Failed', {
+                description: 'An unexpected error occurred. Please try again later.',
+                duration: 6000,
+            });
         }
     }
 
@@ -54,7 +73,13 @@ const SignUp = () => {
                     placeholder="John Doe"
                     register={register}
                     error={errors.fullName}
-                    validation={{ required: 'Full name is required', minLength: 2 }}
+                    validation={{ 
+                        required: 'Full name is required', 
+                        minLength: {
+                            value: 2,
+                            message: 'Name must be at least 2 characters'
+                        }
+                    }}
                 />
 
                 <InputFields
@@ -63,7 +88,13 @@ const SignUp = () => {
                     placeholder="email@gmail.com"
                     register={register}
                     error={errors.email}
-                    validation={{ required: 'Email name is required', pattern: /^\w+@\w+\.\w+$/, message: 'Email address is required' }}
+                    validation={{ 
+                        required: 'Email is required', 
+                        pattern: {
+                            value: /^\w+@\w+\.\w+$/,
+                            message: 'Please enter a valid email address'
+                        }
+                    }}
                 />
 
                 <InputFields
@@ -73,7 +104,13 @@ const SignUp = () => {
                     type="password"
                     register={register}
                     error={errors.password}
-                    validation={{ required: 'Password is required', minLength: 8 }}
+                    validation={{ 
+                        required: 'Password is required', 
+                        minLength: {
+                            value: 8,
+                            message: 'Password must be at least 8 characters'
+                        }
+                    }}
                 />
 
                 <CountryPicker
@@ -115,11 +152,26 @@ const SignUp = () => {
                 />
 
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
-                    {isSubmitting ? 'Creating Account' : 'Start Your Investing Journey'}
+                    {isSubmitting ? 'Creating Account...' : 'Start Your Investing Journey'}
                 </Button>
 
                 <FooterLink text="Already have an account?" linkText="Sign in" href="/sign-in" />
             </form>
+
+            {/* Guest Mode Separator and Button */}
+            <div className="mt-6">
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-600"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-gray-900 text-gray-500">or</span>
+                    </div>
+                </div>
+                <div className="mt-6">
+                    <GuestModeButton />
+                </div>
+            </div>
         </>
     )
 }

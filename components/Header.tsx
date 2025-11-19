@@ -7,6 +7,15 @@ import {searchStocks} from "@/lib/actions/finnhub.actions";
 const Header = async ({ user }: { user: User }) => {
     const initialStocks = await searchStocks();
 
+    // Ensure proper user object for guest mode
+    // The isGuest flag is set in the layout and passed through
+    const userWithGuestStatus: User = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        isGuest: user.isGuest || false
+    };
+
     return (
         <header className="sticky top-0 header">
             <div className="container header-wrapper">
@@ -17,7 +26,7 @@ const Header = async ({ user }: { user: User }) => {
                     <NavItems initialStocks={initialStocks} />
                 </nav>
 
-                <UserDropdown user={user} initialStocks={initialStocks} />
+                <UserDropdown user={userWithGuestStatus} initialStocks={initialStocks} />
             </div>
         </header>
     )
