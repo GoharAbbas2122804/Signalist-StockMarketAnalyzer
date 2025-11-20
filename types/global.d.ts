@@ -71,6 +71,7 @@ declare global {
         id: string;
         name: string;
         email: string;
+        isGuest?: boolean;
     };
 
     type Stock = {
@@ -108,7 +109,7 @@ declare global {
         isInWatchlist: boolean;
         showTrashIcon?: boolean;
         type?: 'button' | 'icon';
-        onWatchlistChange?: (symbol: string, isAdded: boolean) => void;
+        onWatchlistChange?: (symbol: string, isAdded: boolean, meta?: { company?: string }) => void;
     };
 
     type QuoteData = {
@@ -133,6 +134,15 @@ declare global {
 
     type WatchlistTableProps = {
         watchlist: StockWithData[];
+    };
+
+    type WatchlistEntry = {
+        symbol: string;
+        company: string;
+        currentPrice: number | null;
+        changePercent: number | null;
+        addedAt?: string;
+        isInWatchlist: boolean;
     };
 
     type StockWithData = {
@@ -169,12 +179,11 @@ declare global {
     };
 
     type SearchCommandProps = {
+        renderAs?: 'button' | 'text';
+        label?: string;
+        initialStocks: StockWithWatchlistStatus[];
         open?: boolean;
         setOpen?: (open: boolean) => void;
-        renderAs?: 'button' | 'text';
-        buttonLabel?: string;
-        buttonVariant?: 'primary' | 'secondary';
-        className?: string;
     };
 
     type AlertData = {
