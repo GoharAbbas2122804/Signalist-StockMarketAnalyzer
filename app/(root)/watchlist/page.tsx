@@ -8,6 +8,8 @@ import { useGuestSession } from '@/lib/context/GuestSessionContext'
 import { useAuthGuard } from '@/hooks/useAuthGuard'
 import { AuthPromptDialog } from '@/components/AuthPromptDialog'
 import WatchlistButton from '@/components/watchListButton'
+import SearchCommand from '@/components/SearchCommand'
+import { searchStocks } from '@/lib/actions/finnhub.actions'
 import { showErrorToast } from '@/lib/utils/error-handling'
 import { formatPrice } from '@/lib/utils'
 
@@ -44,6 +46,8 @@ const WatchlistPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [initialStocks, setInitialStocks] = useState<StockWithWatchlistStatus[]>([])
 
   const loadWatchlist = useCallback(async () => {
     if (isGuest) {
@@ -77,6 +81,20 @@ const WatchlistPage = () => {
     loadWatchlist()
   }, [loadWatchlist])
 
+  // Fetch initial stocks for search dialog
+  useEffect(() => {
+    const fetchInitialStocks = async () => {
+      try {
+        const stocks = await searchStocks();
+        setInitialStocks(stocks);
+      } catch (error) {
+        console.error('Failed to fetch initial stocks:', error);
+        setInitialStocks([]);
+      }
+    };
+    fetchInitialStocks();
+  }, []);
+
   const handleWatchlistChange = useCallback(
     (symbol: string, isAdded: boolean, meta?: { company?: string }) => {
       if (isGuest) return
@@ -107,7 +125,7 @@ const WatchlistPage = () => {
   const handleAddStock = () => {
     requireAuth(
       'add stocks to your watchlist',
-      () => router.push('/search'),
+      () => setSearchOpen(true),
       { guardType: 'add' }
     )
   }
@@ -275,6 +293,12 @@ const WatchlistPage = () => {
         open={showAuthPrompt}
         onOpenChange={closeAuthPrompt}
         action={authPromptAction}
+      />
+
+      <SearchCommand
+        initialStocks={initialStocks}
+        open={searchOpen}
+        setOpen={setSearchOpen}
       />
     </div>
   )
