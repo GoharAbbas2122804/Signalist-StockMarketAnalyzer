@@ -2,6 +2,7 @@ import { headers, cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getAuth } from '@/lib/better-auth/auth'
+import { ProfileClient } from '@/components/ProfileClient'
 
 const ProfilePage = async () => {
   const auth = await getAuth()
@@ -36,40 +37,15 @@ const ProfilePage = async () => {
 
   const { user } = session
 
-  return (
-    <section className="container max-w-3xl space-y-8 py-10">
-      <div className="rounded-xl border border-gray-700 bg-gray-800/60 p-6 shadow-lg">
-        <div className="flex flex-col gap-2">
-          <span className="text-sm uppercase tracking-wide text-gray-500">Profile</span>
-          <h1 className="text-3xl font-bold text-gray-100">Account overview</h1>
-          <p className="text-gray-500">
-            Manage your personal details and keep your Signalist account secure.
-          </p>
-        </div>
+  // Prepare profile data for client component
+  const profileData = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    image: user.image || null,
+  }
 
-        <dl className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="rounded-lg border border-gray-700 bg-gray-900/40 p-4">
-            <dt className="text-sm text-gray-500">Full name</dt>
-            <dd className="text-xl font-semibold text-gray-100">{user.name}</dd>
-          </div>
-          <div className="rounded-lg border border-gray-700 bg-gray-900/40 p-4">
-            <dt className="text-sm text-gray-500">Email</dt>
-            <dd className="text-xl font-semibold text-gray-100">{user.email}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div className="rounded-xl border border-gray-700 bg-gray-800/40 p-6">
-        <h2 className="text-2xl font-semibold text-gray-100 mb-3">What&apos;s next?</h2>
-        <ul className="space-y-2 text-gray-400">
-          <li>• Set up price alerts to catch market moves</li>
-          <li>• Customize your watchlist for faster research</li>
-          <li>• Explore AI-powered insights tailored to your portfolio</li>
-        </ul>
-      </div>
-    </section>
-  )
+  return <ProfileClient initialData={profileData} />
 }
 
 export default ProfilePage
-

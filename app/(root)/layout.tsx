@@ -6,7 +6,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 
-const layout = async({ children }: { children: React.ReactNode }) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
   const auth = await getAuth();
   const session = await auth.api.getSession({
     headers: await headers()
@@ -19,13 +19,14 @@ const layout = async({ children }: { children: React.ReactNode }) => {
 
   // Create user object based on session type
   let user: User;
-  
+
   if (session) {
     // Authenticated user
     user = {
       id: session.user.id,
       name: session.user.name,
       email: session.user.email,
+      image: session.user.image || null,
       isGuest: false
     }
   } else if (isGuestSession) {
@@ -46,14 +47,14 @@ const layout = async({ children }: { children: React.ReactNode }) => {
 
   return (
 
-      <main className='min-h-screen text-gray-400 flex flex-col'>
-        <ClientSessionSync user={user} />
-        <Header user={user} />
-        <div className='container py-10 flex-1'>
-          {children}
-        </div>
-        <Footer />
-      </main>
+    <main className='min-h-screen text-gray-400 flex flex-col'>
+      <ClientSessionSync user={user} />
+      <Header user={user} />
+      <div className='container py-10 flex-1'>
+        {children}
+      </div>
+      <Footer />
+    </main>
 
 
   )

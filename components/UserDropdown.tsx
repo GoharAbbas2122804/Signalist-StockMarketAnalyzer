@@ -10,15 +10,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button";
-import {LogOut, UserCircle} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { LogOut, UserCircle } from "lucide-react";
 import NavItems from "@/components/NavItems";
 import { signOut } from "@/lib/actions/auth.action";
 import { useGuestSession } from "@/lib/context/GuestSessionContext";
 import { showSuccessToast, showErrorToast } from "@/lib/utils/error-handling";
 
-const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: StockWithWatchlistStatus[]}) => {
+const UserDropdown = ({ user, initialStocks }: { user: User, initialStocks: StockWithWatchlistStatus[] }) => {
     const router = useRouter();
     const { isGuest, exitGuestMode } = useGuestSession();
 
@@ -66,9 +66,12 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                                 <UserCircle className="h-5 w-5" />
                             </AvatarFallback>
                         ) : (
-                            <AvatarFallback className="bg-yellow-500 text-yellow-900 text-sm font-bold">
-                                {initials}
-                            </AvatarFallback>
+                            <>
+                                {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                                <AvatarFallback className="bg-yellow-500 text-yellow-900 text-sm font-bold">
+                                    {initials}
+                                </AvatarFallback>
+                            </>
                         )}
                     </Avatar>
                     <div className="hidden md:flex flex-col items-start">
@@ -88,9 +91,12 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                                     <UserCircle className="h-6 w-6" />
                                 </AvatarFallback>
                             ) : (
-                                <AvatarFallback className="bg-yellow-500 text-yellow-900 text-base font-bold">
-                                    {initials}
-                                </AvatarFallback>
+                                <>
+                                    {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                                    <AvatarFallback className="bg-yellow-500 text-yellow-900 text-base font-bold">
+                                        {initials}
+                                    </AvatarFallback>
+                                </>
                             )}
                         </Avatar>
                         <div className="flex flex-col">
@@ -102,8 +108,8 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                         </div>
                     </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-gray-600"/>
-                
+                <DropdownMenuSeparator className="bg-gray-600" />
+
                 {isGuest ? (
                     <>
                         <DropdownMenuItem onClick={handleLogin} className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-yellow-500 transition-colors cursor-pointer">
@@ -127,8 +133,8 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                         </DropdownMenuItem>
                     </>
                 )}
-                
-                <DropdownMenuSeparator className="hidden sm:block bg-gray-600"/>
+
+                <DropdownMenuSeparator className="hidden sm:block bg-gray-600" />
                 <nav className="sm:hidden">
                     <NavItems initialStocks={initialStocks} />
                 </nav>
