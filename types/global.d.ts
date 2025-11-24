@@ -231,6 +231,38 @@ declare global {
         email: string;
         name: string;
     };
+
+    type DashboardMetrics = {
+        watchlistCount: number;
+        portfolioValue: string;
+        recentActivityCount: number;
+        accountAge: string;
+        userName: string;
+    };
+
+    type MetricCardProps = {
+        icon: React.ComponentType<{ className?: string }>;
+        title: string;
+        value: string | number;
+        trend?: {
+            value: number;
+            isPositive: boolean;
+        };
+        subtitle?: string;
+    };
+
+    type PortfolioDataPoint = {
+        date: string;
+        value: number;
+    };
+
+    type AssetAllocation = {
+        sector: string;
+        percentage: number;
+        value: number;
+        color: string;
+    };
+
 }
 
 export {};
