@@ -1,7 +1,8 @@
 'use server';
 
 import { connectToDatabase } from '@/Database/mongoose';
-import { User, UserRole } from '@/Database/models/user.model';
+import { User } from '@/Database/models/user.model';
+import { UserRole } from '@/lib/types/user';
 import { AuditLog, AuditAction } from '@/Database/models/auditLog.model';
 import { requireAdminSession, getRequestMetadata } from '@/lib/utils/adminAuth';
 import { revalidatePath } from 'next/cache';

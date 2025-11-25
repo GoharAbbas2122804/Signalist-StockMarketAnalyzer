@@ -10,7 +10,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { connectToDatabase } from '../Database/mongoose';
-import { User, UserRole } from '../Database/models/user.model';
+import { User } from '../Database/models/user.model';
+import { UserRole } from '../lib/types/user';
 import { betterAuth } from 'better-auth';
 import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import { nextCookies } from 'better-auth/next-js';

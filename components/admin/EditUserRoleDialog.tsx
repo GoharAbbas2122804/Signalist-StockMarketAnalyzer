@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { UserRole } from '@/Database/models/user.model';
+import { useState, useEffect } from 'react';
+import { UserRole } from '@/lib/types/user';
 import { getRoleDisplayName } from '@/lib/utils/rbac';
 import {
     Dialog,
@@ -38,10 +38,11 @@ export default function EditUserRoleDialog({
 }: EditUserRoleDialogProps) {
     const [selectedRole, setSelectedRole] = useState<UserRole | undefined>(user?.role);
 
-    // Update selected role when user changes
-    if (user && selectedRole !== user.role && !loading) {
-        setSelectedRole(user.role);
-    }
+    useEffect(() => {
+        if (user) {
+            setSelectedRole(user.role);
+        }
+    }, [user]);
 
     if (!user) return null;
 
