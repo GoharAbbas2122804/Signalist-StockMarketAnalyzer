@@ -1,10 +1,5 @@
 import { Schema, model, models, type Document, type Model } from 'mongoose';
-
-export enum UserRole {
-  GUEST = 'guest',
-  USER = 'user',
-  ADMIN = 'admin'
-}
+import { UserRole } from '@/lib/types/user';
 
 export interface IUser extends Document {
   id: string;

@@ -2,7 +2,7 @@ import { connectToDatabase } from "@/Database/mongoose";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter} from "better-auth/adapters/mongodb";
 import { nextCookies} from "better-auth/next-js";
-import { UserRole } from "@/Database/models/user.model";
+import { UserRole } from '@/lib/types/user';
 
 let authInstance: ReturnType<typeof betterAuth> | null = null;
 

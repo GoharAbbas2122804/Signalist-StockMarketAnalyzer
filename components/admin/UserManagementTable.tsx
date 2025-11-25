@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { UserRole } from '@/Database/models/user.model';
+import { UserRole } from '@/lib/types/user';
 import { updateUserRole, deleteUser, restoreUser } from '@/lib/actions/admin.actions';
 import { getRoleBadgeVariant, getRoleDisplayName } from '@/lib/utils/rbac';
 import {
@@ -41,7 +41,7 @@ interface UserManagementTableProps {
     onRefresh: () => void;
 }
 
-export default function UserManagementTable({ users, onRefresh }: UserManagementTableProps) {
+export default function UserManagementTable({ users = [], onRefresh }: UserManagementTableProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [roleDialogOpen, setRoleDialogOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);

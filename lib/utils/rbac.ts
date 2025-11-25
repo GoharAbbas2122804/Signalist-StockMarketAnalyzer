@@ -1,4 +1,4 @@
-import { UserRole } from '@/Database/models/user.model';
+import { UserRole } from '@/lib/types/user';
 
 export const ROLES = {
   GUEST: UserRole.GUEST,

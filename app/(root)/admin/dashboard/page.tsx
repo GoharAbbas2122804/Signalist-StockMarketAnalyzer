@@ -5,6 +5,7 @@ import { Users, UserPlus, Shield, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserGrowthChart from '@/components/admin/UserGrowthChart';
 import RoleDistributionChart from '@/components/admin/RoleDistributionChart';
+import DashboardUsersTable from '@/components/admin/DashboardUsersTable';
 
 export const dynamic = 'force-dynamic';
 
@@ -107,6 +108,9 @@ export default async function AdminDashboardPage() {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Recent Users Table */}
+            <DashboardUsersTable />
 
             {/* Quick Actions */}
             <Card>
