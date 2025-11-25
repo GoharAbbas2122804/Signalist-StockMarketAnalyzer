@@ -149,9 +149,8 @@ Notes:
 ## Getting Started (Local Development)
 1) Install dependencies
 ```bash
-pnpm install
-# or npm install
-yarn install
+npm install
+
 ```
 
 2) Configure `.env.local` as described above.

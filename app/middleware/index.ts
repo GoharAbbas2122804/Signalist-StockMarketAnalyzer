@@ -1,13 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { auth } from "@/lib/better-auth/auth";
 
 const GUEST_COOKIE_NAME = 'signalist_guest_session';
 
 export async function middleware(request: NextRequest) {
     const sessionCookie = getSessionCookie(request);
     const guestCookie = request.cookies.get(GUEST_COOKIE_NAME);
+    const { pathname } = request.nextUrl;
 
-    if (!sessionCookie && !guestCookie) {
+    // Check if this is an admin route
+    const isAdminRoute = pathname.startsWith('/admin');
+
+    // If accessing admin routes, verify admin role
+    if (isAdminRoute && sessionCookie) {
+        try {
+            const session = await auth.api.getSession({
+                headers: request.headers
+            });
+
+            const userRole = (session?.user as any)?.role;
+
+            if (userRole !== 'admin') {
+                // Non-admin trying to access admin routes
+                return NextResponse.redirect(new URL("/", request.url));
+            }
+        } catch (error) {
+            console.error('Middleware auth error:', error);
+            return NextResponse.redirect(new URL("/sign-in", request.url));
+        }
+    }
+
+    // Existing auth logic for non-admin routes
+    if (!isAdminRoute && !sessionCookie && !guestCookie) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 

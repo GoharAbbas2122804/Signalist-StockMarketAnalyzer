@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/Database/mongoose";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter} from "better-auth/adapters/mongodb";
 import { nextCookies} from "better-auth/next-js";
+import { UserRole } from "@/Database/models/user.model";
 
 let authInstance: ReturnType<typeof betterAuth> | null = null;
 
@@ -14,7 +15,7 @@ export const getAuth = async () => {
     if(!db) throw new Error('MongoDB connection not found');
 
     authInstance = betterAuth({
-        database: mongodbAdapter(db as unknown),
+        database: mongodbAdapter(db),
         secret: process.env.BETTER_AUTH_SECRET,
         baseURL: process.env.BETTER_AUTH_URL,
         emailAndPassword: {
@@ -24,6 +25,24 @@ export const getAuth = async () => {
             minPasswordLength: 8,
             maxPasswordLength: 128,
             autoSignIn: true,
+        },
+        user: {
+            additionalFields: {
+                role: {
+                    type: "string",
+                    defaultValue: UserRole.USER,
+                    required: false,
+                    input: false, // Prevent users from setting role during signup
+                },
+                deletedAt: {
+                    type: "date",
+                    required: false,
+                },
+                lastLoginAt: {
+                    type: "date",
+                    required: false,
+                }
+            }
         },
         plugins: [nextCookies()],
     });
