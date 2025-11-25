@@ -2,11 +2,20 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { Wallet, ListChecks, Activity, User, ArrowRight, TrendingUp } from 'lucide-react'
 import DashboardMetricCard from '@/components/DashboardMetricCard'
-import PortfolioChart from '@/components/PortfolioChart'
-import AssetAllocationChart from '@/components/AssetAllocationChart'
 import { Button } from '@/components/ui/button'
+
+// Lazy load heavy chart components
+const PortfolioChart = dynamic(() => import('@/components/PortfolioChart'), {
+  loading: () => <div className="h-[300px] w-full bg-muted/20 animate-pulse rounded-xl" />,
+  ssr: false // Charts are client-side only usually
+})
+const AssetAllocationChart = dynamic(() => import('@/components/AssetAllocationChart'), {
+  loading: () => <div className="h-[300px] w-full bg-muted/20 animate-pulse rounded-xl" />,
+  ssr: false
+})
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
