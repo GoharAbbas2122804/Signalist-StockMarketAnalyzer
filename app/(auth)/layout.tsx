@@ -51,6 +51,24 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
                         </div>
                     </section>
 
+                    {/* Mobile Testimonial Section - Visible only on mobile/tablet */}
+                    <div className="lg:hidden px-6 pb-8">
+                        <blockquote className="auth-blockquote text-lg mb-4">
+                            Signalist turned my watchlist into a winning list. The alerts are spot-on, and I feel more confident making moves in the market
+                        </blockquote>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <cite className="auth-testimonial-author block">- GoharAbbas</cite>
+                                <p className="text-sm text-gray-500">Full Stack Web Developer</p>
+                            </div>
+                            <div className="flex items-center gap-0.5">
+                                {[1, 2, 3, 4, 5].map((stars) => (
+                                    <Image src='/assets/icons/star.svg' alt="Star" width={20} height={20} key={stars} className="h-5 w-5" />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
 
                     <section className="auth-right-section !h-full hidden lg:flex">
                         <div className="z-10 relative lg:mt-4 lg:mb-16 ">
@@ -59,8 +77,8 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
                             </blockquote>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <cite className="auth-testimonial-author">- Haris Khan</cite>
-                                    <p className="max-md:text-xs text-gray-500">AI Developer & Stock Broker</p>
+                                    <cite className="auth-testimonial-author">- GoharAbbas</cite>
+                                    <p className="max-md:text-xs text-gray-500">Full Stack Web Developer</p>
                                 </div>
                                 <div className="flex items-center gap-0.5">
                                     {[1, 2, 3, 4, 5].map((stars) => (
