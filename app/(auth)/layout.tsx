@@ -14,47 +14,70 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
     })
 
     // Maintain redirect logic for authenticated users
-    if(session?.user) redirect ('/')
-    
+    if (session?.user) redirect('/')
+
+    const guestUser: User = {
+        id: 'guest',
+        name: 'Guest',
+        email: '',
+        isGuest: true
+    }
+
     return (
         <AuthLayoutClient>
-            <main className='auth-layout'>
-                <section className="auth-left-section scrollbar-hide-default ">
-                    <Link href='/' className="auh-logo mt-4">
-                        <Image src='/assets/icons/logo.svg' alt="Signalist Logo" width={140} height={32} className="h-8 w-auto cursor-pointer" />
-                    </Link>
+            <main className='flex flex-col h-screen bg-gray-900 relative overflow-hidden'>
+                {/* Navbar Integration */}
+                <Header user={guestUser} />
 
-                    <div className="pb-6 lg:pb-8 flex-1">
-                        {children}
-                    </div>
-                </section>
+                {/* Main Content Area - Applies the split layout */}
+                <div className="auth-layout !h-full w-full flex-1">
+                    <section className="auth-left-section scrollbar-hide-default !h-full pt-4 lg:pt-0">
+                        {/* Hidden Logo since it's in Navbar now, or keep it if desired? request said "preserve all original... logic". 
+                            However, user asked to "add navbar... acting as a header". 
+                            Usually having two logos (Navbar + Page) is redundant. 
+                            But to strictly "preserve", I will keep it but maybe adjust spacing. 
+                            Actually, request said "Review... to identify... integration points". 
+                            And "Add... Navbar... positioning it at the top". 
+                            Let's keep the existing logo for now as it's part of the auth form flow usually. 
+                        */}
+                        <div className="flex-1 flex flex-col justify-center">
+                            <Link href='/' className="auth-logo mt-4 block lg:hidden mb-8">
+                                <Image src='/assets/icons/logo.svg' alt="Signalist Logo" width={140} height={32} className="h-8 w-auto cursor-pointer" />
+                            </Link>
 
-
-            <section className="auth-right-section">
-                <div className="z-10 relative lg:mt-4 lg:mb-16 ">
-                    <blockquote className="auth-blockquote">
-                        Signalist turned my watchlist into a winning list. The alerts are spot-on, and I feel more confident making moves in the market
-                    </blockquote>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <cite className="auth-testimonial-author">- Haris Khan</cite>
-                            <p className="max-md:text-xs text-gray-500">AI Developer & Stock Broker</p>
+                            <div className="pb-6 lg:pb-8">
+                                {children}
+                            </div>
                         </div>
-                        <div className="flex items-center gap-0.5">
-                            {[1, 2, 3, 4, 5].map((stars) => (
-                                <Image src='/assets/icons/star.svg' alt="Star" width={20} height={20} key={stars} className="2-5 h-5" />
-                            ))}
+                    </section>
 
+
+                    <section className="auth-right-section !h-full hidden lg:flex">
+                        <div className="z-10 relative lg:mt-4 lg:mb-16 ">
+                            <blockquote className="auth-blockquote">
+                                Signalist turned my watchlist into a winning list. The alerts are spot-on, and I feel more confident making moves in the market
+                            </blockquote>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <cite className="auth-testimonial-author">- Haris Khan</cite>
+                                    <p className="max-md:text-xs text-gray-500">AI Developer & Stock Broker</p>
+                                </div>
+                                <div className="flex items-center gap-0.5">
+                                    {[1, 2, 3, 4, 5].map((stars) => (
+                                        <Image src='/assets/icons/star.svg' alt="Star" width={20} height={20} key={stars} className="2-5 h-5" />
+                                    ))}
+
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="flex-1 relative overflow-hidden min-h-0">
-                    <Image src='/assets/images/dashboard.png' alt="Dashboard Preview" width={1440} height={1150} className="auth-dashboard-preview absolute" />
-                </div>
+                        <div className="flex-1 relative overflow-hidden min-h-0">
+                            <Image src='/assets/images/dashboard.png' alt="Dashboard Preview" width={1440} height={1150} className="auth-dashboard-preview absolute" />
+                        </div>
 
-            </section>
-        </main>
+                    </section>
+                </div>
+            </main>
         </AuthLayoutClient>
     )
 }

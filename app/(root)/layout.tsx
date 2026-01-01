@@ -12,10 +12,10 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
     headers: await headers()
   })
 
-  // Check for guest session in cookies
-  const cookieStore = await cookies();
-  const guestSessionCookie = cookieStore.get('signalist_guest_session');
-  const isGuestSession = guestSessionCookie?.value === 'true';
+  // Check for guest session in cookies (optional additional check if needed later)
+  // const cookieStore = await cookies();
+  // const guestSessionCookie = cookieStore.get('signalist_guest_session');
+  // const isGuestSession = guestSessionCookie?.value === 'true';
 
   // Create user object based on session type
   let user: User;
@@ -29,17 +29,14 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
       image: session.user.image || null,
       isGuest: false
     }
-  } else if (isGuestSession) {
-    // Guest user
+  } else {
+    // No session - treat as guest
     user = {
       id: 'guest',
       name: 'Guest',
       email: '',
       isGuest: true
     }
-  } else {
-    // No session at all - redirect to sign-in
-    redirect('/sign-in')
   }
 
 

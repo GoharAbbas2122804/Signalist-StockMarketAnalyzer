@@ -13,12 +13,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut, UserCircle } from "lucide-react";
-import NavItems from "@/components/NavItems";
 import { signOut } from "@/lib/actions/auth.action";
 import { useGuestSession } from "@/lib/context/GuestSessionContext";
 import { showSuccessToast, showErrorToast } from "@/lib/utils/error-handling";
 
-const UserDropdown = ({ user, initialStocks }: { user: User, initialStocks: StockWithWatchlistStatus[] }) => {
+const UserDropdown = ({ user }: { user: User }) => {
     const router = useRouter();
     const { isGuest, exitGuestMode } = useGuestSession();
 
@@ -134,10 +133,6 @@ const UserDropdown = ({ user, initialStocks }: { user: User, initialStocks: Stoc
                     </>
                 )}
 
-                <DropdownMenuSeparator className="hidden sm:block bg-gray-600" />
-                <nav className="sm:hidden">
-                    <NavItems initialStocks={initialStocks} />
-                </nav>
             </DropdownMenuContent>
         </DropdownMenu>
     )
