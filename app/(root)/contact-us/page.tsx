@@ -24,17 +24,29 @@ const Page = () => {
 
   const onSubmit = async (values: ContactFormValues) => {
     try {
-      const res = await fetch('/api/contact-us', {
+      const access_key = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key,
+          ...values,
+          subject: `New Contact Query: ${values.title}` // Custom subject for Web3Forms
+        })
       })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data?.message || 'Failed to send message')
+
+      const data = await res.json()
+
+      if (data.success) {
+        toast.success('Message sent successfully')
+        reset()
+      } else {
+        throw new Error(data.message || 'Failed to send message')
       }
-      toast.success('Message sent successfully')
-      reset()
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong'
       toast.error(errorMessage)

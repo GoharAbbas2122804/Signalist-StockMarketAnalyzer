@@ -1,190 +1,127 @@
 # Signalist – Stock Market Analyzer
 
-Signalist is a modern stock market dashboard that helps you research tickers, track a personal watchlist, view market insights with TradingView widgets, and receive helpful emails like personalized welcomes and daily news summaries. It’s built with Next.js App Router, Better Auth for authentication, MongoDB via Mongoose, Inngest for background jobs and AI summarization, and Nodemailer for email delivery.
+Signalist is a modern stock market dashboard that helps you research tickers, track a personal watchlist, view market insights with TradingView widgets, and receive helpful emails like personalized welcomes and daily news summaries.
 
-## Contents
-- Overview
-- Features
-- Architecture & Tech Stack
-- App Structure
-- Core Functionality
-- API & Background Jobs
-- Environment Variables
-- Getting Started (Local Development)
-- Build & Production Run
-- Troubleshooting
+**GitHub Repository:** [https://github.com/GoharAbbas2122804/Signalist-StockMarketAnalyzer](https://github.com/GoharAbbas2122804/Signalist-StockMarketAnalyzer)
 
-## Overview
-Signalist focuses on three pillars:
-- Authentication and user profile bootstrapping
-- Watchlist-centered research and news
-- Insightful UI via TradingView widgets, with optional email updates
+![Dashboard Preview](public/readme-assets/dashboard.png)
 
-## Features
-- Authentication with email + password using Better Auth
-- Secure route protection via middleware; anonymous users are redirected to `sign-in`
-- Watchlist model in MongoDB to store user-specific symbols
-- Stock search and market news using Finnhub APIs
-- TradingView-based dashboard widgets (market overview, heatmap, technical analysis, candles, company info)
-- Contact form that emails the project owner
-- Email notifications
-  - Personalized welcome email on sign-up (AI-crafted intro)
-  - Daily news summary per user (based on watchlist; falls back to general market news)
-- Background jobs powered by Inngest with Gemini-based summarization
+## 🚀 How I Made This Project
 
-## Architecture & Tech Stack
-- Framework: Next.js 15 (App Router, React 19)
-- Styling/UI: Tailwind CSS 4, Radix UI primitives, `lucide-react`
-- Auth: `better-auth` + `better-auth/adapters/mongodb` with Next.js cookies plugin
-- Database: MongoDB with Mongoose (connection pooling + caching)
-- Background jobs & AI: Inngest (Gemini 1.5 for text generation/summarization)
-- Email: Nodemailer via Gmail (or any SMTP provider you configure)
-- Data: Finnhub API
-- Utilities: `react-hook-form`, `tailwind-merge`, `clsx`, `sonner`
+Signalist was built to solve the need for a personalized, intelligent financial dashboard. The goal was to combine real-time market data with AI-driven insights in a seamless user interface.
 
-## App Structure
-High-level directories:
-- `app/`: Next.js routes (auth pages, public pages, API routes, middleware)
-- `lib/`: Actions (server functions), auth setup, constants, Inngest client/functions/prompts, email helpers
-- `Database/`: Mongoose connection and `Watchlist` model
-- `components/`: UI components and TradingView widget wrappers
-- `types/`: Global types
+### Tech Stack & Rationale
 
-Key files to know:
-- Auth setup: `lib/better-auth/auth.ts`
-- DB connection: `Database/mongoose.ts`
-- Watchlist model: `Database/models/watchlist.model.ts`
-- Finnhub actions: `lib/actions/finnhub.actions.ts`
-- Inngest: `lib/inngest/client.ts`, `lib/inngest/function.ts`, `lib/inngest/prompts.ts`
-- Emails: `lib/NodeMailer/index.ts`, `lib/NodeMailer/templates.ts`
-- API routes: `app/api/auth/[...all]/route.ts`, `app/api/contact-us/route.ts`, `app/api/inngest/route.ts`
-- Middleware (route protection): `app/middleware/index.ts`
+- **Next.js 15 (App Router)**: Chosen for its robust server-side rendering capabilities, ensuring fast initial loads and SEO-friendly pages.
+- **MongoDB & Mongoose**: Selected for its flexibility in handling user profiles and dynamic watchlists without rigid schema constraints.
+- **Tailwind CSS 4**: Used for rapid UI development and ensuring a modern, responsive design system.
+- **Inngest**: Implemented to handle complex background workflows (like daily email summaries) reliably without managing cron infrastructure.
 
-## Core Functionality
+## 🔌 APIs Used & Why
 
-### Authentication (Better Auth)
-- Initialization happens in `lib/better-auth/auth.ts`. It connects to MongoDB, configures `emailAndPassword`, and exposes `auth.api` handlers.
-- API endpoint proxy: `app/api/auth/[...all]/route.ts` forwards GET/POST to Better Auth.
-- Middleware protects all non-public routes and redirects unauthenticated users to `sign-in`.
+1.  **Finnhub API**:
+    - _Why_: Provides reliable, real-time stock quotes, market news, and company profiles. It's the core data source for the dashboard.
+2.  **Google Gemini AI**:
+    - _Why_: Powers the intelligent text summarization for news emails and personalized user interactions, making the app feel "smart".
+3.  **Web3Forms**:
+    - _Why_: A lightweight, serverless solution for the "Contact Us" form. It allows sending emails directly from the frontend without setting up complex SMTP servers for simple user feedback.
+4.  **Better Auth**:
+    - _Why_: A modern, comprehensive authentication solution that handles secure sessions, database adapters, and middleware protection out of the box.
 
-Public pages under `app/(auth)/` include `sign-in` and `sign-up`.
+## 📸 Screenshots & Pages
 
-### Database & Models
-- `Database/mongoose.ts` provides a cached connection with sensible pool/timeouts and logs environment.
-- `Watchlist` (`Database/models/watchlist.model.ts`) stores: `userId`, `symbol`, `company`, `addedAt` with a unique index per `(userId, symbol)`.
+### Dashboard
 
-### Watchlist & User Actions
-- `lib/actions/watchlist.actions.ts` → `getWatchlistSymbolsByEmail(email)` resolves Better Auth’s `user` collection, finds the user by email, then fetches symbols from `Watchlist`.
-- `lib/actions/user.actions.ts` → `getAllUsersForNewsEmail()` fetches basic user records for emailing.
+The central hub for your portfolio overview and account status.
+![Dashboard](public/readme-assets/dashboard.png)
 
-### Market Data (Finnhub)
-- `lib/actions/finnhub.actions.ts` provides:
-  - `getNews(symbols?: string[])`: fetches up to 6 articles. If symbols are provided, fetches company news in a round‑robin fashion; otherwise falls back to general news.
-  - `searchStocks(query?: string)`: searches Finnhub or shows popular profiles if no query.
-- Helpers in `lib/utils.ts` format time, market cap, dates, article payloads, etc.
-- Constants and TradingView configs live in `lib/constants.ts`.
+### Market Overview
 
-### TradingView Widgets
-This project includes configuration objects for TradingView widgets (market overview, heatmap, candle chart, baseline, technical analysis, company profile, financials). See `lib/constants.ts` and components under `components/` like `TradingViewWidget.tsx` and related hooks in `hooks/useTradingViewWidgets.tsx`.
+Real-time tracking of major indices and market trends.
+![Market](public/readme-assets/market.png)
 
-### Emails
-- Transporter in `lib/NodeMailer/index.ts` uses `NODEMAILER_EMAIL` and `NODEMAILER_PASSWORD`.
-- Templates in `lib/NodeMailer/templates.ts` for:
-  - Welcome email
-  - Daily news summary
-  - Price upper/lower alerts
-  - Volume alerts
-  - Inactive user reminder
+### Stock Heatmap
 
-### Background Jobs (Inngest + Gemini)
-- `lib/inngest/client.ts` bootstraps an Inngest client with Gemini API key.
-- `lib/inngest/function.ts` defines two functions:
-  - `sendSignUpEmail`: Listens to `app/user.created`, generates a personalized intro via Gemini using `PERSONALIZED_WELCOME_EMAIL_PROMPT`, and sends a welcome email.
-  - `sendDailyNewsSummary`: Cron `0 12 * * *` or `app/send.daily.news` event. For each user, pulls their watchlist, fetches associated news (fallback to general), summarizes via Gemini using `NEWS_SUMMARY_EMAIL_PROMPT`, and emails the result.
-- Exposed via `app/api/inngest/route.ts` using `serve` from `inngest/next` (GET/POST/PUT).
+Visual representation of market performance across sectors.
+![Heatmap](public/readme-assets/heatmap.png)
 
-## API & Background Jobs
+### Watchlist
 
-### API Endpoints
-- `GET/POST /api/auth/*` → Better Auth handler
-- `POST /api/contact-us` → Validates payload and emails the owner
-- `GET|POST|PUT /api/inngest` → Inngest function runner endpoint
+Your personalized list of tracked stocks with quick metrics.
+![Watchlist](public/readme-assets/watchlist.png)
 
-Example: send a contact message
-```bash
-curl -X POST http://localhost:3000/api/contact-us \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "name":"John Doe",
-    "email":"john@example.com",
-    "contactNumber":"+1-555-1234",
-    "title":"Partnership Inquiry",
-    "description":"We would love to discuss a partnership opportunity."
-  }'
-```
+### Top Stories
 
-### Background Jobs
-- Signup: triggered when `signUpWithEmail` calls `inngest.send({ name: 'app/user.created', ... })` in `lib/actions/auth.action.ts`.
-- Daily news: triggered automatically via cron (`0 12 * * *`) or by sending an event `app/send.daily.news` to Inngest.
-
-## Environment Variables
-Create a `.env.local` with the following keys:
-
-- Required
-  - `MONGODB_URI` → MongoDB connection string
-  - `BETTER_AUTH_SECRET` → Secret for Better Auth
-  - `BETTER_AUTH_URL` → Base URL (e.g., `http://localhost:3000` or production URL)
-  - `NODEMAILER_EMAIL` → SMTP username (e.g., Gmail address)
-  - `NODEMAILER_PASSWORD` → SMTP password or app password
-  - One of: `FINNHUB_API_KEY` or `NEXT_PUBLIC_FINNHUB_API_KEY` → Finnhub token
-  - `GEMINI_API_KEY` → For Inngest AI (Gemini 1.5)
-
-- Optional
-  - `NODE_ENV` → Affects logging in DB connect helper
-
-Notes:
-- Gmail often requires an App Password when 2FA is enabled.
-- If `FINNHUB_API_KEY` is not set, features like search/news will gracefully degrade.
-
-## Getting Started (Local Development)
-1) Install dependencies
-```bash
-npm install
-
-```
-
-2) Configure `.env.local` as described above.
-
-3) Start the dev server
-    npm run dev
-
-The app runs at `http://localhost:3000`.
-
-Sign up with email/password on `http://localhost:3000/sign-up`. On successful sign-up, a personalized welcome email is sent via Inngest + Nodemailer.
-
-
-```
-
-Deployment tips:
-- Ensure all env vars are set in your hosting platform.
-- Inngest cron requires Inngest Cloud or a compatible scheduler hitting `/api/inngest` (when running locally, you can manually trigger events via the Inngest UI/CLI).
-- Configure SMTP credentials for email delivery.
-
-## Troubleshooting
-- Authentication not working
-  - Verify `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`.
-  - Check network access to MongoDB.
-
-- No emails received
-  - Confirm `NODEMAILER_EMAIL`/`NODEMAILER_PASSWORD` and SMTP/App Password.
-  - Check host spam folder and sending limits.
-
-- No market news / search empty
-  - Ensure `FINNHUB_API_KEY` (or `NEXT_PUBLIC_FINNHUB_API_KEY`) is set.
-
-- Inngest jobs not firing
-  - For cron, use Inngest Cloud. For dev, trigger `app/send.daily.news` event or test `sendSignUpEmail` by creating a new user.
+Curated market news to keep you informed.
+![Top Stories](public/readme-assets/top-stories.png)
 
 ---
 
-Made with ❤️ by the Signalist team Gohar Abbas & Shoaib Akhtar.
+## 🛠️ Getting Started (Setup)
+
+Follow these steps to set up the project locally:
+
+1.  **Clone the Repository**
+
+    ```bash
+    git clone https://github.com/GoharAbbas2122804/Signalist-StockMarketAnalyzer.git
+    cd Signalist-StockMarketAnalyzer
+    ```
+
+2.  **Install Dependencies**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Environment Variables**
+    Create a `.env.local` file in the root directory and add the following keys:
+
+    ```env
+    # Database
+    MONGODB_URI=your_mongodb_connection_string
+
+    # Authentication
+    BETTER_AUTH_SECRET=your_secret_key
+    BETTER_AUTH_URL=http://localhost:3000
+
+    # Email Services
+    NODEMAILER_EMAIL=your_email@gmail.com
+    NODEMAILER_PASSWORD=your_app_password
+    NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_key
+
+    # APIs
+    GEMINI_API_KEY=your_gemini_api_key
+    NEXT_PUBLIC_FINNHUB_API_KEY=your_finnhub_key
+    ```
+
+4.  **Run the Development Server**
+
+    ```bash
+    npm run dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+---
+
+## 📂 App Structure & Features
+
+### Core Features
+
+- **Authentication**: Secure sign-up/login with Better Auth.
+- **Watchlist**: Add/remove stocks to track them in real-time.
+- **Market Data**: Live charts, candles, and company info via Finnhub & TradingView.
+- **AI Integration**: Daily news summaries delivered to your email.
+- **Contact Form**: Reach out to the developers (powered by Web3Forms).
+
+### Directory Structure
+
+- `app/`: Next.js routes and pages.
+- `lib/`: Utility functions, API clients (Inngest, Finnhub), and actions.
+- `Database/`: Mongoose models and connection logic.
+- `components/`: Reusable UI components.
+
+---
+
+Made with ❤️ by **Gohar Abbas** & **Shoaib Akhtar**.
