@@ -1,6 +1,6 @@
-import { headers } from 'next/headers';
-import { auth } from '@/lib/better-auth/auth';
-import { isAdmin } from './rbac';
+import { headers } from "next/headers";
+import { getAuth } from "@/lib/better-auth/auth";
+import { isAdmin } from "./rbac";
 
 export interface AdminSession {
   user: {
@@ -22,8 +22,9 @@ export interface AdminSession {
  */
 export async function getAdminSession(): Promise<AdminSession | null> {
   try {
+    const auth = await getAuth();
     const session = await auth.api.getSession({
-      headers: await headers()
+      headers: await headers(),
     });
 
     if (!session?.user) {
@@ -44,15 +45,15 @@ export async function getAdminSession(): Promise<AdminSession | null> {
         email: session.user.email,
         name: session.user.name || undefined,
         image: session.user.image,
-        role: role
+        role: role,
       },
       session: {
         token: session.session.token,
-        expiresAt: session.session.expiresAt
-      }
+        expiresAt: session.session.expiresAt,
+      },
     };
   } catch (error) {
-    console.error('Error getting admin session:', error);
+    console.error("Error getting admin session:", error);
     return null;
   }
 }
@@ -65,7 +66,7 @@ export async function requireAdminSession(): Promise<AdminSession> {
   const session = await getAdminSession();
 
   if (!session) {
-    throw new Error('Unauthorized: Admin access required');
+    throw new Error("Unauthorized: Admin access required");
   }
 
   return session;
@@ -76,9 +77,12 @@ export async function requireAdminSession(): Promise<AdminSession> {
  */
 export async function getRequestMetadata() {
   const headersList = await headers();
-  
+
   return {
-    ipAddress: headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown',
-    userAgent: headersList.get('user-agent') || 'unknown'
+    ipAddress:
+      headersList.get("x-forwarded-for") ||
+      headersList.get("x-real-ip") ||
+      "unknown",
+    userAgent: headersList.get("user-agent") || "unknown",
   };
 }

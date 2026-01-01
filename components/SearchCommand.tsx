@@ -7,7 +7,7 @@ import { Loader2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
 import { useDebounce } from "@/hooks/useDebounce";
-import WatchlistButton from "@/components/watchListButton";
+import WatchlistButton from "@/components/WatchListButton";
 
 export default function SearchCommand({
   renderAs = 'button',
@@ -57,12 +57,12 @@ export default function SearchCommand({
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()
-        setOpen((v: boolean) => !v)
+        setOpen(!open)
       }
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [setOpen])
+  }, [setOpen, open])
 
   const handleSearch = async () => {
     if (!isSearchMode) return setStocks(initialStocks);
